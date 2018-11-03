@@ -23,7 +23,7 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
     private ArrayList<String> mDescriptions = new ArrayList<>();
     private ArrayList<String> mDate = new ArrayList<>();
 
-    public NewsRecyclerViewAdapter(Context context,ArrayList<String> title, ArrayList<String> desc,ArrayList<String> date) {
+    public NewsRecyclerViewAdapter(Context context,ArrayList<String> title, ArrayList<String> desc, ArrayList<String> date) {
         inflater= LayoutInflater.from(context);
         mTitles = title;
         mDescriptions = desc;
@@ -40,8 +40,9 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
         Log.e(TAG, " onBondViewHolder was called");
-        holder.title.setText(mTitles.get(position));
-        holder.description.setText(mDescriptions.get(position));
+        holder.title.setText("Title: " + mTitles.get(position));
+        holder.date.setText("Date: " + mDate.get(position));
+        holder.description.setText("Description: " + mDescriptions.get(position));
         holder.parentLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){

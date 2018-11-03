@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static String results = "Your URL should be: ";
-    private static String json;
     private static final String TAG = "News App";
     public TextView textView;
     private RecyclerView mRecyclerView;
@@ -41,56 +40,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        android.support.v7.app.ActionBar ab = getSupportActionBar();
-//        ab.setDisplayShowHomeEnabled(true);
-//        textView = findViewById(R.id.textView);
-//        textView.setText(results);
-        try {
-        initNewsItems();
-//        ArrayList<NewsItem> n = getItems();
-//        for(int i = 0; i < n.size(); i++ ){
-//            String title = n.get(i).getTitleFromJSON();
-//            String date = n.get(i).getPublishedAtFromJSON();
-//            String description = n.get(i).getDescriptionFromJSON();
-//            titleString.add(title);
-//            dateString.add(date);
-//            descriptionString.add(description);
-//        }
-        }catch (JSONException e){
-            e.printStackTrace();
+    }
+
+
+    private void setUpNews(String input) throws JSONException{
+        Log.e("SetUp News:" , input);
+        JSONObject jsonObj = new JSONObject(input);
+        JsonUtils utils = new JsonUtils();
+        ArrayList<NewsItem> list = utils.parseNews(jsonObj);
+        for(int i = 0; i < list.size(); i++){
+            titleString.add(list.get(i).getTitleFromJSON());
+            descriptionString.add(list.get(i).getDescriptionFromJSON());
+            dateString.add(list.get(i).getPublishedAtFromJSON());
         }
     }
 
-    public ArrayList<NewsItem> getItems() throws JSONException{
-        NetworkUtils n = new NetworkUtils();
-        URL url = n.buildUrl();
-        try {
-            json = n.getResponseFromHttpUrl(url);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        JSONObject jobj = new JSONObject(json);
-        JsonUtils j = new JsonUtils();
-        ArrayList<NewsItem> g = j.parseNews(jobj);
-        return g;
-    }
-
-    private void initNewsItems() throws JSONException{
+    private void initNewsItems() throws JSONException,IOException{
         Log.e("Initializing: ", "one moment please...");
-
-
-
-        titleString.add("This should be a title");
-        descriptionString.add("This should be a description");
-
-        titleString.add("hey");
-        descriptionString.add("there");
-
-        titleString.add("heyq");
-        descriptionString.add("thereq");
-
-        titleString.add("heyq1");
-        descriptionString.add("thereq1");
         initRecyclerView();
     }
     private void initRecyclerView(){
@@ -119,27 +85,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class NewsQueryTask extends AsyncTask<Void, Void, Void> {
-
+        String json;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            NetworkUtils n = new NetworkUtils();
-            JSONObject jobj = new JSONObject();
-            URL url = n.buildUrl();
+            URL url = NetworkUtils.buildUrl();
             try{
-                json = n.getResponseFromHttpUrl(url);
-            } catch(java.io.IOException e){
+                json = NetworkUtils.getResponseFromHttpUrl(url);
+                setUpNews(json);
+            } catch(JSONException | java.io.IOException e){
                 e.printStackTrace();
             }
-//            try {
-//                jobj = new JSONObject(json);
-//                JsonUtils j = new JsonUtils();
-//                stories = j.parseNews(jobj);
-//                NewsAdapter.mList.addAll(stories);
-//                Log.e("Heres the array",stories.get(2).getUrlFromJSON());
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+
             results += json;
             return null;
         }
@@ -147,7 +104,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-//            textView.setText(results);
+            try {
+                initNewsItems();
+            }catch(IOException | JSONException e){
+                e.printStackTrace();
+            }
         }
     }
 }
