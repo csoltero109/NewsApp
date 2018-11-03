@@ -27,14 +27,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String results = "Your URL should be: ";
-    private static final String TAG = "News App";
-    public TextView textView;
     private RecyclerView mRecyclerView;
     private NewsRecyclerViewAdapter NewsAdapter;
     private ArrayList<String> titleString = new ArrayList<>();
     private ArrayList<String> descriptionString = new ArrayList<>();
     private ArrayList<String> dateString = new ArrayList<>();
+    private ArrayList<String> urlString = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpNews(String input) throws JSONException{
         Log.e("SetUp News:" , input);
+        titleString.clear();
+        descriptionString.clear();
+        dateString.clear();
+        urlString.clear();
         JSONObject jsonObj = new JSONObject(input);
         JsonUtils utils = new JsonUtils();
         ArrayList<NewsItem> list = utils.parseNews(jsonObj);
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             titleString.add(list.get(i).getTitleFromJSON());
             descriptionString.add(list.get(i).getDescriptionFromJSON());
             dateString.add(list.get(i).getPublishedAtFromJSON());
+            urlString.add(list.get(i).getUrlFromJSON());
         }
     }
 
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initRecyclerView(){
         mRecyclerView = findViewById(R.id.news_recyclerview);
-        NewsAdapter = new NewsRecyclerViewAdapter(this,titleString,descriptionString,dateString);
+        NewsAdapter = new NewsRecyclerViewAdapter(this,titleString,descriptionString,dateString,urlString);
         mRecyclerView.setAdapter(NewsAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -96,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
             } catch(JSONException | java.io.IOException e){
                 e.printStackTrace();
             }
-
-            results += json;
             return null;
         }
 

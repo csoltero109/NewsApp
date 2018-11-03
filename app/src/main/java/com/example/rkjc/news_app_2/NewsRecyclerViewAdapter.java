@@ -22,12 +22,14 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mDescriptions = new ArrayList<>();
     private ArrayList<String> mDate = new ArrayList<>();
+    private ArrayList<String> mURL = new ArrayList<>();
 
-    public NewsRecyclerViewAdapter(Context context,ArrayList<String> title, ArrayList<String> desc, ArrayList<String> date) {
+    public NewsRecyclerViewAdapter(Context context,ArrayList<String> title, ArrayList<String> desc, ArrayList<String> date, ArrayList<String> url) {
         inflater= LayoutInflater.from(context);
         mTitles = title;
         mDescriptions = desc;
         mDate = date;
+        mURL = url;
     }
 
     @Override
@@ -40,6 +42,7 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
         Log.e(TAG, " onBondViewHolder was called");
+        final int positionClick = position;
         holder.title.setText("Title: " + mTitles.get(position));
         holder.date.setText("Date: " + mDate.get(position));
         holder.description.setText("Description: " + mDescriptions.get(position));
@@ -47,6 +50,8 @@ public class NewsRecyclerViewAdapter  extends RecyclerView.Adapter<NewsRecyclerV
             @Override
             public void onClick(View view){
                 Log.e("Toast", " I couldnt afford toast...so this will do");
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse(mURL.get(positionClick)));
+                view.getContext().startActivity(browserIntent);
             }
         });
     }
