@@ -40,13 +40,13 @@ public class NewsItem {
     public String getAuthorFromJSON(){
         return author;
     }
-    public String getTitleFromJSON(){
+    public String getTitle(){
         return title;
     }
-    public String getDescriptionFromJSON(){
+    public String getDescription(){
         return description;
     }
-    public String getUrlFromJSON(){
+    public String getUrl(){
         return url;
     }
     public String getUrlToImageFromJSON(){

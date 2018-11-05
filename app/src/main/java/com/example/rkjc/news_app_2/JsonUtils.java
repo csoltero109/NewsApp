@@ -8,10 +8,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class JsonUtils {
-    public static ArrayList<NewsItem> parseNews(JSONObject jObject) throws JSONException {
+    public static ArrayList<NewsItem> parseNews(String JSONString) {
         ArrayList<NewsItem> list = new ArrayList<NewsItem>();
-        JSONObject o = jObject;
-        JSONArray a = o.getJSONArray("articles");
+        try {
+            JSONObject o = new JSONObject(JSONString);
+            JSONArray a = o.getJSONArray("articles");
         for (int i = 0; i < a.length(); i++) {
             JSONObject json = new JSONObject(a.getString(i));
             NewsItem n = new NewsItem();
@@ -22,6 +23,10 @@ public class JsonUtils {
             n.setUrlFromJSON(json.getString("url"));
             n.setUrlToImageFromJSON(json.getString("urlToImage"));
             list.add(n);
+        }
+        }
+        catch(JSONException e){
+            e.printStackTrace();
         }
         return list;
     }

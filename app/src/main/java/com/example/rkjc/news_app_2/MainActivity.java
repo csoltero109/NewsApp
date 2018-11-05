@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
         descriptionString.clear();
         dateString.clear();
         urlString.clear();
-        JSONObject jsonObj = new JSONObject(input);
+        //JSONObject jsonObj = new JSONObject(input);
         JsonUtils utils = new JsonUtils();
-        ArrayList<NewsItem> list = utils.parseNews(jsonObj);
+        ArrayList<NewsItem> list = utils.parseNews(input);
         for(int i = 0; i < list.size(); i++){
-            titleString.add(list.get(i).getTitleFromJSON());
-            descriptionString.add(list.get(i).getDescriptionFromJSON());
+            titleString.add(list.get(i).getTitle());
+            descriptionString.add(list.get(i).getDescription());
             dateString.add(list.get(i).getPublishedAtFromJSON());
-            urlString.add(list.get(i).getUrlFromJSON());
+            urlString.add(list.get(i).getUrl());
         }
     }
 
